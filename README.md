@@ -14,13 +14,19 @@ flowchart LR
  Worker[Migration and worker jobs] --> DB
 ```
 
-## Setup
+## Quick Start
 
-1. Create a virtual environment and install `requirements-dev.txt`.
-2. Copy `.env.example` to `.env` and replace `HINBERT_JWT_SECRET_KEY` with a secret-manager value.
-3. Start local dependencies with `docker compose -f docker/docker-compose.yml up -d postgres redis`.
-4. Run `python scripts/run_migrations.py`, then `uvicorn app.main:app --reload`.
-5. Open `/docs` or `/redoc` for generated API documentation.
+1. Clone the repository and enter it: `git clone <repository-url> && cd hinbert-fastapi`.
+2. Create a virtual environment: `python -m venv .venv` and activate it with `.venv\\Scripts\\Activate.ps1` on Windows or `source .venv/bin/activate` on Unix.
+3. Install development dependencies: `pip install -r requirements-dev.txt`.
+4. Create local configuration: `Copy-Item .env.example .env` on Windows or `cp .env.example .env` on Unix. Replace development secrets before any shared deployment.
+5. Apply migrations: `alembic upgrade head`.
+6. Seed development records: `python scripts/seed_data.py`.
+7. Start the server: `uvicorn app.main:app --reload`.
+8. Open `/docs` or `/redoc` for generated API documentation.
+9. Run tests: `pytest -v`.
+
+For local PostgreSQL and Redis instead, run `docker compose -f docker/docker-compose.yml up -d postgres redis`, set `DATABASE_URL` in `.env`, then run the migration and seed commands.
 
 ## Security and customization
 

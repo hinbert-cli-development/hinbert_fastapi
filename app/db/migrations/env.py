@@ -1,9 +1,12 @@
 """Alembic environment configured for async SQLAlchemy metadata discovery."""
 
+import asyncio
+
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+import app.models  # noqa: F401
 from app.core.config.settings import get_settings
 from app.db.base import Base
 
@@ -28,3 +31,9 @@ async def run_migrations_online() -> None:
         await connection.run_sync(lambda sync: context.configure(connection=sync, target_metadata=target_metadata))
         await connection.run_sync(lambda _: context.run_migrations())
     await connectable.dispose()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    asyncio.run(run_migrations_online())
