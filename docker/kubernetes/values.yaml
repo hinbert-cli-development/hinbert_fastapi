@@ -1,0 +1,6 @@
+replicaCount: 2
+image:
+  repository: hinbert-fastapi
+  tag: latest
+service:
+  port: 8000

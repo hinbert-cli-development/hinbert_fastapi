@@ -1,0 +1,1 @@
+"""SQLAlchemy domain model namespace."""

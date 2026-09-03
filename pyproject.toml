@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hinbert-fastapi"
+version = "0.1.0"
+description = "Secure, scalable FastAPI enterprise boilerplate"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["fastapi>=0.115", "sqlalchemy[asyncio]>=2.0", "pydantic-settings>=2.4"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+lint.ignore = ["B008", "UP046"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["app/tests"]
