@@ -181,7 +181,8 @@ async def verify_totp(
 
 
 @router.get("/google")
-async def google_login():
+@limiter.limit("30/minute")
+async def google_login(request: Request):
     """Redirect to Google's OAuth authorization endpoint."""
     settings = get_settings()
     params = urlencode(
@@ -196,13 +197,15 @@ async def google_login():
 
 
 @router.get("/google/callback", response_model=APIResponse[TokenResponse])
-async def google_callback(code: str, session: AsyncSession = Depends(get_db)):
+@limiter.limit("30/minute")
+async def google_callback(request: Request, code: str, session: AsyncSession = Depends(get_db)):
     """Exchange Google's code and provision or authenticate the user."""
     return await _social_login("google", code, session)
 
 
 @router.get("/facebook")
-async def facebook_login():
+@limiter.limit("30/minute")
+async def facebook_login(request: Request):
     """Redirect to Facebook's OAuth authorization endpoint."""
     settings = get_settings()
     params = urlencode(
@@ -217,7 +220,8 @@ async def facebook_login():
 
 
 @router.get("/facebook/callback", response_model=APIResponse[TokenResponse])
-async def facebook_callback(code: str, session: AsyncSession = Depends(get_db)):
+@limiter.limit("30/minute")
+async def facebook_callback(request: Request, code: str, session: AsyncSession = Depends(get_db)):
     """Exchange Facebook's code and provision or authenticate the user."""
     return await _social_login("facebook", code, session)
 
@@ -245,6 +249,7 @@ async def _social_login(provider: str, code: str, session: AsyncSession):
 
 
 @router.get("/me", response_model=APIResponse[UserOut])
-async def me(user: User = Depends(get_current_active_user)):
+@limiter.limit("60/minute")
+async def me(request: Request, user: User = Depends(get_current_active_user)):
     """Return the authenticated user's safe profile."""
     return APIResponse(data=user)

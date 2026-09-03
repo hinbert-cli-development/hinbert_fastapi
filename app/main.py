@@ -5,7 +5,7 @@ scripts. Customize middleware and router registration here; business logic
 belongs in services rather than in this composition module.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi.middleware import SlowAPIMiddleware
 
@@ -37,13 +37,14 @@ def create_app() -> FastAPI:
     application.include_router(api_router, prefix=settings.api_prefix)
     register_exception_handlers(application)
     register_rate_limit(application)
+
+    @application.get("/health", tags=["health"])
+    @limiter.limit("120/minute")
+    async def health(request: Request) -> dict[str, str]:
+        """Return a lightweight liveness response for load balancers and probes."""
+        return {"status": "ok"}
+
     return application
 
 
 app = create_app()
-
-
-@app.get("/health", tags=["health"])
-async def health() -> dict[str, str]:
-    """Return a lightweight liveness response for load balancers and probes."""
-    return {"status": "ok"}

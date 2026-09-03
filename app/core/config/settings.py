@@ -14,14 +14,17 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Application settings with validation and conservative security defaults."""
 
-    app_name: str = "Hinbert FastAPI"
+    app_name: str = Field(default="Hinbert FastAPI", validation_alias=AliasChoices("APP_NAME", "HINBERT_APP_NAME"))
     api_prefix: str = "/api/v1"
-    environment: str = "development"
+    environment: str = Field(default="development", validation_alias=AliasChoices("ENVIRONMENT", "HINBERT_ENVIRONMENT"))
     database_url: str = Field(
         default="postgresql+asyncpg://postgres:postgres@localhost:5432/app",
         validation_alias=AliasChoices("DATABASE_URL", "HINBERT_DATABASE_URL"),
     )
-    redis_url: str = "redis://localhost:6379/0"
+    redis_url: str = Field(
+        default="redis://localhost:6379/0", validation_alias=AliasChoices("REDIS_URL", "HINBERT_REDIS_URL")
+    )
+    debug: bool = Field(default=False, validation_alias=AliasChoices("DEBUG", "HINBERT_DEBUG"))
     jwt_secret_key: SecretStr = Field(
         default=SecretStr("change-me-in-production"),
         validation_alias=AliasChoices("SECRET_KEY", "HINBERT_JWT_SECRET_KEY"),

@@ -14,7 +14,7 @@ from app.core.middleware.rate_limit import limiter
 from app.db.session import get_db
 from app.models.domain.product import Product
 from app.models.domain.user import User
-from app.models.schemas.product import ProductCreate, ProductOut
+from app.models.schemas.product import ProductCreate, ProductOut, ProductPage
 from app.models.schemas.response import APIResponse
 from app.repositories.product_repository import ProductRepository
 from app.services.product_service import create_product, update_product
@@ -37,7 +37,7 @@ async def create(
     return APIResponse(message="Product created", data=product, status_code=201)
 
 
-@router.get("", response_model=APIResponse[dict])
+@router.get("", response_model=APIResponse[ProductPage])
 @limiter.limit("120/minute")
 async def list_products(
     request: Request,

@@ -10,6 +10,8 @@ from app.core.config.settings import get_settings
 from app.core.security.password import hash_password
 from app.models.domain.product import Product
 from app.models.domain.user import User
+from app.repositories.product_repository import ProductRepository
+from app.repositories.user_repository import create as create_user
 
 
 async def seed() -> None:
@@ -18,17 +20,19 @@ async def seed() -> None:
         raise RuntimeError("Refusing to seed a non-development environment")
     async with SessionLocal() as session:
         if await session.scalar(select(User).where(User.email == "demo@example.com")) is None:
-            session.add(
+            await create_user(
+                session,
                 User(
                     email="demo@example.com",
                     full_name="Demo User",
                     password_hash=hash_password("DemoPassword!123"),
                     is_verified=True,
-                )
+                ),
             )
         if await session.scalar(select(Product).where(Product.name == "Demo Product")) is None:
-            session.add(Product(name="Demo Product", description="Development-only sample", price=Decimal("19.99")))
-        await session.commit()
+            await ProductRepository(session).create(
+                Product(name="Demo Product", description="Development-only sample", price=Decimal("19.99"))
+            )
 
 
 def main() -> None:

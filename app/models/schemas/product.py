@@ -20,3 +20,12 @@ class ProductOut(ProductCreate):
 
     model_config = ConfigDict(from_attributes=True)
     id: UUID
+
+
+class ProductPage(BaseModel):
+    """Paginated product collection with stable client-facing metadata."""
+
+    items: list[ProductOut]
+    total_count: int
+    page: int
+    limit: int

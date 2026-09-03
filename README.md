@@ -2,6 +2,8 @@
 
 `hinbert-fastapi` is a reusable FastAPI foundation for PyPI distribution or a private GitHub package. It separates HTTP endpoints, services, repositories, and SQLAlchemy models so teams can scale ownership without moving contracts.
 
+The current implementation includes credential authentication, refresh-token rotation, logout, email verification, password reset, encrypted TOTP provisioning, OAuth callback adapters, user/product CRUD, pagination, filtering, sorting, rate limiting, migrations, and deployment templates. OAuth providers and SMTP require deployment credentials.
+
 ## Architecture
 
 ```mermaid
@@ -34,4 +36,12 @@ Access tokens are short-lived JWTs. Refresh credentials are opaque and only thei
 
 ## Quality and deployment
 
-Run `pytest --cov=app --cov-fail-under=80`, `ruff check .`, `black --check .`, `isort --check-only .`, and `mypy app`. Build with `docker build -f docker/Dockerfile .`; the Helm chart is under `docker/kubernetes`. Publish to PyPI with a trusted publisher or install the same package from a private GitHub registry.
+Run `pytest -v --cov=app --cov-fail-under=80`, `ruff check .`, `black --check .`, `isort --check-only .`, and `mypy app`. Build with `docker build -f docker/Dockerfile .`; the Helm chart is under `docker/kubernetes`. Publish to PyPI with a trusted publisher or install the same package from a private GitHub registry.
+
+## Configuration
+
+SMTP variables are required for real verification and password-reset delivery. Google/Facebook client credentials are required for the corresponding OAuth callbacks. Never use the example JWT secret or example database credentials outside local development.
+
+## Contributing
+
+Add business rules in services, database access in repositories, and HTTP contracts in versioned endpoint modules. Add a migration for every model change and pair each behavior change with unit and integration tests. Run the quality commands above before opening a pull request.
