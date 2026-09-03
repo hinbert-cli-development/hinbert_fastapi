@@ -8,7 +8,7 @@ class SignupRequest(BaseModel):
 
     email: EmailStr
     full_name: str = Field(min_length=1, max_length=200)
-    password: str = Field(min_length=12, max_length=128)
+    password: str = Field(min_length=12, max_length=72)
 
 
 class LoginRequest(BaseModel):
@@ -16,3 +16,15 @@ class LoginRequest(BaseModel):
 
     email: EmailStr
     password: str
+
+
+class EmailTokenRequest(BaseModel):
+    """Single-use email verification token payload."""
+
+    token: str = Field(min_length=20)
+
+
+class SocialAuthRequest(BaseModel):
+    """OAuth callback data returned by a supported provider."""
+
+    code: str = Field(min_length=1)

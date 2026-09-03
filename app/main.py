@@ -7,12 +7,13 @@ belongs in services rather than in this composition module.
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.v1.routers.api_router import api_router
 from app.core.config.settings import get_settings
 from app.core.middleware.error_handler import register_exception_handlers
 from app.core.middleware.logging import RequestLoggingMiddleware
-from app.core.middleware.rate_limit import limiter
+from app.core.middleware.rate_limit import limiter, register_rate_limit
 
 
 def create_app() -> FastAPI:
@@ -24,6 +25,7 @@ def create_app() -> FastAPI:
     settings = get_settings()
     application = FastAPI(title=settings.app_name, version="0.1.0")
     application.state.limiter = limiter
+    application.add_middleware(SlowAPIMiddleware)
     application.add_middleware(RequestLoggingMiddleware)
     application.add_middleware(
         CORSMiddleware,
@@ -34,7 +36,14 @@ def create_app() -> FastAPI:
     )
     application.include_router(api_router, prefix=settings.api_prefix)
     register_exception_handlers(application)
+    register_rate_limit(application)
     return application
 
 
 app = create_app()
+
+
+@app.get("/health", tags=["health"])
+async def health() -> dict[str, str]:
+    """Return a lightweight liveness response for load balancers and probes."""
+    return {"status": "ok"}

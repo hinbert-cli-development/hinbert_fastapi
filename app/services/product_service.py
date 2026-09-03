@@ -13,3 +13,12 @@ async def create_product(session: AsyncSession, payload: ProductCreate) -> Produ
     await session.commit()
     await session.refresh(product)
     return product
+
+
+async def update_product(session: AsyncSession, product: Product, payload: ProductCreate) -> Product:
+    """Replace editable product fields and persist the result."""
+    for field, value in payload.model_dump().items():
+        setattr(product, field, value)
+    await session.commit()
+    await session.refresh(product)
+    return product

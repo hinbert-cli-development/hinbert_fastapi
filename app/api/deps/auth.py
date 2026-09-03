@@ -31,3 +31,10 @@ async def get_current_active_user(user: User = Depends(get_current_user)) -> Use
     if not user.is_active:
         raise UnauthorizedError("Inactive account")
     return user
+
+
+async def get_current_admin(user: User = Depends(get_current_active_user)) -> User:
+    """Require an active account with administrator privileges."""
+    if not user.is_admin:
+        raise UnauthorizedError("Administrator privileges required")
+    return user

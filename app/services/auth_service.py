@@ -7,6 +7,7 @@ from uuid import UUID
 
 from app.core.config.settings import get_settings
 from app.core.security.jwt import create_token
+from app.core.security.password import hash_password
 
 
 def hash_refresh_token(token: str) -> str:
@@ -24,3 +25,8 @@ def issue_tokens(user_id: UUID) -> tuple[str, str, str, datetime]:
     expiry = datetime.now(UTC) + timedelta(days=settings.refresh_token_days)
     access = create_token(user_id, "access", timedelta(minutes=settings.access_token_minutes))
     return access, raw_refresh, hash_refresh_token(raw_refresh), expiry
+
+
+def issue_password_hash(password: str) -> str:
+    """Hash a password for reset and social-account provisioning workflows."""
+    return hash_password(password)

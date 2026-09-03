@@ -19,6 +19,13 @@ class UserUpdate(BaseModel):
     full_name: str | None = Field(default=None, min_length=1, max_length=200)
 
 
+class AdminUserUpdate(UserUpdate):
+    """Administrator-only profile and role update payload."""
+
+    is_active: bool | None = None
+    is_admin: bool | None = None
+
+
 class UserOut(BaseModel):
     """Safe public user representation."""
 

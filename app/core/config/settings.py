@@ -68,6 +68,9 @@ class Settings(BaseSettings):
     @classmethod
     def reject_weak_production_secret(cls, value: SecretStr) -> SecretStr:
         """Prevent the documented development secret from reaching production."""
+        secret = value.get_secret_value()
+        if secret == "change-me-in-production" or len(secret) < 32:
+            raise ValueError("SECRET_KEY must be at least 32 characters and must not use the default value")
         return value
 
 
