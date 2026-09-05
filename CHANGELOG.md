@@ -1,4 +1,10 @@
-# Contributing to hinbert-fastapi
+
+## [0.2.1] - 2026-09-05
+
+### Fixed
+- PyPI upload workflow
+- CI/CD pipeline
+- Trusted publisher configuration# Contributing to hinbert-fastapi
 
 Thank you for considering contributing! 🎉
 
