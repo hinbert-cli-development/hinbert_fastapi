@@ -1,11 +1,9 @@
-
 import ast
 import os
 import re
 import shutil
 import sys
 from pathlib import Path
-
 import click
 
 # ============================================================
@@ -13,8 +11,9 @@ import click
 # ============================================================
 if sys.platform == "win32":
     import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
 LOGO = """
 ╔══════════════════════════════════════════════════════════════╗
@@ -109,7 +108,9 @@ def cleanup_imports(project_path, removed_modules):
                     if alias.name in removed_modules:
                         remove_lines.add(node.lineno - 1)
                 continue
-            if module in removed_modules or any(module and module.startswith(f"{removed}.") for removed in removed_modules):
+            if module in removed_modules or any(
+                module and module.startswith(f"{removed}.") for removed in removed_modules
+            ):
                 remove_lines.add(node.lineno - 1)
 
         cleaned = "".join(line for index, line in enumerate(lines) if index not in remove_lines)
@@ -122,8 +123,15 @@ def cleanup_imports(project_path, removed_modules):
             cleaned = re.sub(r"^.*register_rate_limit\(application\)\n", "", cleaned, flags=re.MULTILINE)
 
         if "app.utils.logger" in removed_modules:
-            cleaned = re.sub(r"^.*from app\.core\.middleware\.logging import RequestLoggingMiddleware\n", "", cleaned, flags=re.MULTILINE)
-            cleaned = re.sub(r"^.*application\.add_middleware\(RequestLoggingMiddleware\)\n", "", cleaned, flags=re.MULTILINE)
+            cleaned = re.sub(
+                r"^.*from app\.core\.middleware\.logging import RequestLoggingMiddleware\n",
+                "",
+                cleaned,
+                flags=re.MULTILINE,
+            )
+            cleaned = re.sub(
+                r"^.*application\.add_middleware\(RequestLoggingMiddleware\)\n", "", cleaned, flags=re.MULTILINE
+            )
 
         if cleaned != source:
             python_file.write_text(cleaned, encoding="utf-8")
@@ -171,8 +179,12 @@ def remove_class_attributes(file_path, class_name, attribute_names):
     for node in tree.body:
         if isinstance(node, ast.ClassDef) and node.name == class_name:
             for child in node.body:
-                if isinstance(child, ast.AnnAssign) and isinstance(child.target, ast.Name) and child.target.id in attribute_names:
-                        remove_lines.update(range(child.lineno - 1, child.end_lineno))
+                if (
+                    isinstance(child, ast.AnnAssign)
+                    and isinstance(child.target, ast.Name)
+                    and child.target.id in attribute_names
+                ):
+                    remove_lines.update(range(child.lineno - 1, child.end_lineno))
     file_path.write_text(
         "".join(line for index, line in enumerate(lines) if index not in remove_lines),
         encoding="utf-8",
@@ -185,7 +197,7 @@ def write_none_auth_modules(project_path):
     (utils_dir / "password.py").write_text(
         '"""Password hashing helpers for projects without a security package."""\n\n'
         "from passlib.context import CryptContext\n\n"
-        "pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\")\n\n"
+        'pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")\n\n'
         "def hash_password(password: str) -> str:\n    return pwd_context.hash(password)\n\n"
         "def verify_password(password: str, hashed_password: str) -> bool:\n    return pwd_context.verify(password, hashed_password)\n",
         encoding="utf-8",
@@ -193,9 +205,9 @@ def write_none_auth_modules(project_path):
     (utils_dir / "auth.py").write_text(
         '"""Minimal token helpers for projects without external authentication."""\n\n'
         "def create_token(subject, token_type, expires_delta) -> str:\n    return str(subject)\n\n"
-        "def decode_token(token: str, expected_type: str = \"access\") -> dict[str, str]:\n"
-        "    if not token:\n        raise ValueError(\"Invalid token\")\n"
-        "    return {\"sub\": token, \"type\": expected_type}\n",
+        'def decode_token(token: str, expected_type: str = "access") -> dict[str, str]:\n'
+        '    if not token:\n        raise ValueError("Invalid token")\n'
+        '    return {"sub": token, "type": expected_type}\n',
         encoding="utf-8",
     )
 
@@ -214,11 +226,7 @@ def snapshot_tree(path):
     """Capture existing files so current-directory generation can be restored."""
     if not path.exists():
         return {}
-    return {
-        item.relative_to(path): item.read_bytes()
-        for item in path.rglob("*")
-        if item.is_file()
-    }
+    return {item.relative_to(path): item.read_bytes() for item in path.rglob("*") if item.is_file()}
 
 
 def restore_tree(path, snapshot):
@@ -408,9 +416,13 @@ def init(
     # ============================================================
 
     if not project_name:
-        project_name = "my_project" if yes else click.prompt(
-            "📁 Project name",
-            default="my_project",
+        project_name = (
+            "my_project"
+            if yes
+            else click.prompt(
+                "📁 Project name",
+                default="my_project",
+            )
         )
 
     if project_name == ".":
@@ -561,26 +573,11 @@ def init(
     click.echo(f"  📁 Project Name    : {display_name}")
     click.echo(f"  🗄️  Database       : {db}")
     click.echo(f"  🔐 Authentication  : {auth}")
-    click.echo(
-        f"  🔑 2FA             : "
-        f"{'✅ Yes' if two_factor else '❌ No'}"
-    )
-    click.echo(
-        f"  📧 Email Verify    : "
-        f"{'✅ Yes' if email_verification else '❌ No'}"
-    )
-    click.echo(
-        f"  🚦 Rate Limiting   : "
-        f"{'✅ Yes' if rate_limiting else '❌ No'}"
-    )
-    click.echo(
-        f"  🐳 Docker          : "
-        f"{'✅ Yes' if docker else '❌ No'}"
-    )
-    click.echo(
-        f"  ☸️  Kubernetes      : "
-        f"{'✅ Yes' if kubernetes else '❌ No'}"
-    )
+    click.echo(f"  🔑 2FA             : " f"{'✅ Yes' if two_factor else '❌ No'}")
+    click.echo(f"  📧 Email Verify    : " f"{'✅ Yes' if email_verification else '❌ No'}")
+    click.echo(f"  🚦 Rate Limiting   : " f"{'✅ Yes' if rate_limiting else '❌ No'}")
+    click.echo(f"  🐳 Docker          : " f"{'✅ Yes' if docker else '❌ No'}")
+    click.echo(f"  ☸️  Kubernetes      : " f"{'✅ Yes' if kubernetes else '❌ No'}")
     click.echo(f"  📊 Logging         : {logging_library}")
 
     click.echo("=" * 60)
@@ -599,9 +596,7 @@ def init(
     # TEMPLATE PATHS
     # ============================================================
 
-    click.echo(
-        f"\n📦 Generating project: {display_name}..."
-    )
+    click.echo(f"\n📦 Generating project: {display_name}...")
 
     package_root = Path(__file__).resolve().parent.parent
 
@@ -666,11 +661,7 @@ def init(
         # ALEMBIC
         # --------------------------------------------------------
 
-        migrations_src = (
-            app_template
-            / "db"
-            / "migrations"
-        )
+        migrations_src = app_template / "db" / "migrations"
 
         if migrations_src.exists():
             shutil.copytree(
@@ -678,11 +669,7 @@ def init(
                 project_path / "alembic",
             )
         else:
-            (
-                project_path
-                / "alembic"
-                / "versions"
-            ).mkdir(
+            (project_path / "alembic" / "versions").mkdir(
                 parents=True,
                 exist_ok=True,
             )
@@ -691,9 +678,7 @@ def init(
         # TESTS
         # --------------------------------------------------------
 
-        (
-            project_path / "tests"
-        ).mkdir(
+        (project_path / "tests").mkdir(
             parents=True,
             exist_ok=True,
         )
@@ -782,35 +767,23 @@ BACKEND_CORS_ORIGINS=["http://localhost:3000", "http://localhost:8000"]
                 ]
             )
         elif auth == "oauth2":
-            req_lines.append(
-                "python-jose[cryptography]>=3.3,<4.0"
-            )
+            req_lines.append("python-jose[cryptography]>=3.3,<4.0")
 
         # ✅ 2FA is INDEPENDENT of auth - add if enabled
         if two_factor:
-            req_lines.append(
-                "pyotp>=2.9,<3.0"
-            )
+            req_lines.append("pyotp>=2.9,<3.0")
 
         if rate_limiting:
-            req_lines.append(
-                "slowapi>=0.1.9,<1.0"
-            )
+            req_lines.append("slowapi>=0.1.9,<1.0")
 
         if logging_library == "loguru":
-            req_lines.append(
-                "loguru>=0.7,<1.0"
-            )
+            req_lines.append("loguru>=0.7,<1.0")
         elif logging_library == "structlog":
-            req_lines.append(
-                "structlog>=24.0,<25.0"
-            )
+            req_lines.append("structlog>=24.0,<25.0")
 
         req_lines = list(dict.fromkeys(req_lines))
 
-        req_file = (
-            project_path / "requirements.txt"
-        )
+        req_file = project_path / "requirements.txt"
 
         req_file.write_text(
             "\n".join(req_lines),
@@ -821,9 +794,7 @@ BACKEND_CORS_ORIGINS=["http://localhost:3000", "http://localhost:8000"]
         # ALEMBIC CONFIG
         # --------------------------------------------------------
 
-        alembic_file = (
-            project_path / "alembic.ini"
-        )
+        alembic_file = project_path / "alembic.ini"
 
         alembic_file.write_text(
             f"""[alembic]
@@ -879,10 +850,13 @@ black.entrypoint = black
             removed_modules.extend(["core/security/totp", "services/totp_service"])
             auth_endpoint = project_path / "app/api/v1/endpoints/auth.py"
             remove_functions(auth_endpoint, {"setup_totp", "verify_totp"})
-            remove_imports_from_file(auth_endpoint, [
-                "models/domain/totp_secret",
-                "models/schemas/totp",
-            ])
+            remove_imports_from_file(
+                auth_endpoint,
+                [
+                    "models/domain/totp_secret",
+                    "models/schemas/totp",
+                ],
+            )
         # ✅ If 2FA is enabled, keep totp.py - no action needed!
 
         # --------------------------------------------------------
@@ -900,13 +874,15 @@ black.entrypoint = black
                     "app/services/email_service.py",
                 ],
             )
-            removed_modules.extend([
-                "models/domain/email_verification",
-                "models/domain/password_reset",
-                "repositories/email_verification_repository",
-                "repositories/password_reset_repository",
-                "services/email_service",
-            ])
+            removed_modules.extend(
+                [
+                    "models/domain/email_verification",
+                    "models/domain/password_reset",
+                    "repositories/email_verification_repository",
+                    "repositories/password_reset_repository",
+                    "services/email_service",
+                ]
+            )
             remove_class_attributes(
                 project_path / "app/models/domain/user.py",
                 "User",
@@ -955,14 +931,10 @@ black.entrypoint = black
         # INIT FILES
         # --------------------------------------------------------
 
-        for root, dirs, files in os.walk(
-            project_path
-        ):
+        for root, dirs, files in os.walk(project_path):
             root_path = Path(root)
 
-            init_path = (
-                root_path / "__init__.py"
-            )
+            init_path = root_path / "__init__.py"
 
             if not init_path.exists():
                 init_path.touch()
@@ -994,9 +966,7 @@ black.entrypoint = black
 
     except Exception as exc:
 
-        click.echo(
-            f"❌ Error while generating project: {exc}"
-        )
+        click.echo(f"❌ Error while generating project: {exc}")
 
         if project_name != ".":
             shutil.rmtree(
@@ -1006,9 +976,7 @@ black.entrypoint = black
         elif existing_snapshot is not None:
             restore_tree(project_path, existing_snapshot)
 
-        raise click.ClickException(
-            "Project generation failed."
-        ) from exc
+        raise click.ClickException("Project generation failed.") from exc
 
 
 if __name__ == "__main__":
