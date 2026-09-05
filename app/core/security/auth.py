@@ -1,6 +1,5 @@
 """Small authentication primitives shared by services and dependencies."""
 
-from app.core.security.jwt import decode_token
 from app.core.security.password import verify_password
 
 

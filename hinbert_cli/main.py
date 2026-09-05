@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-import sys
-import os
-import shutil
 import ast
+import os
 import re
+import shutil
+import sys
 from pathlib import Path
+
 import click
 
 # ============================================================
@@ -170,8 +171,7 @@ def remove_class_attributes(file_path, class_name, attribute_names):
     for node in tree.body:
         if isinstance(node, ast.ClassDef) and node.name == class_name:
             for child in node.body:
-                if isinstance(child, ast.AnnAssign) and isinstance(child.target, ast.Name):
-                    if child.target.id in attribute_names:
+                if isinstance(child, ast.AnnAssign) and isinstance(child.target, ast.Name) and child.target.id in attribute_names:
                         remove_lines.update(range(child.lineno - 1, child.end_lineno))
     file_path.write_text(
         "".join(line for index, line in enumerate(lines) if index not in remove_lines),
@@ -317,7 +317,6 @@ def configure_auth_imports(project_path, auth):
 @click.group()
 def cli():
     """Hinbert FastAPI CLI."""
-    pass
 
 
 @cli.command()
@@ -589,14 +588,12 @@ def init(
     # ============================================================
     # CONFIRMATION
     # ============================================================
-
-    if not yes:
-        if not click.confirm(
-            "\n✅ Proceed with these settings?",
-            default=True,
-        ):
-            click.echo("❌ Cancelled.")
-            return
+    if not yes and not click.confirm(
+        "\n✅ Proceed with these settings?",
+        default=True,
+    ):
+        click.echo("❌ Cancelled.")
+        return
 
     # ============================================================
     # TEMPLATE PATHS
