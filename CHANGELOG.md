@@ -1,9 +1,8 @@
 
-## [0.2.2] - 2026-09-05
+## [0.2.3] - 2026-09-05
 
 ### Fixed
-- PyPI upload workflow with Twine
-- CI/CD pipeline
+- PyPI upload with correct version
 
 ## How to Contribute
 
