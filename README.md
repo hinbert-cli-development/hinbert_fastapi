@@ -1,7 +1,7 @@
-[![GitHub stars](https://img.shields.io/github/stars/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/forks)
-[![GitHub issues](https://img.shields.io/github/issues/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/pulls)
+[![GitHub stars](https://img.shields.io/github/stars/hinbert-cli-development/hinbert_fastapi)](https://github.com/hinbert-cli-development/hinbert_fastapi/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/hinbert-cli-development/hinbert_fastapi)](https://github.com/hinbert-cli-development/hinbert_fastapi/forks)
+[![GitHub issues](https://img.shields.io/github/issues/hinbert-cli-development/hinbert_fastapi)](https://github.com/hinbert-cli-development/hinbert_fastapi/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/hinbert-cli-development/hinbert_fastapi)](https://github.com/hinbert-cli-development/hinbert_fastapi/pulls)
 [![PyPI](https://img.shields.io/pypi/v/hinbert-fastapi)](https://pypi.org/project/hinbert-fastapi/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 # Hinbert FastAPI
