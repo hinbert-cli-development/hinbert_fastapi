@@ -1,3 +1,9 @@
+[![GitHub stars](https://img.shields.io/github/stars/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/forks)
+[![GitHub issues](https://img.shields.io/github/issues/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/HassanMalik-Al/hinbert_fastapi)](https://github.com/HassanMalik-Al/hinbert_fastapi/pulls)
+[![PyPI](https://img.shields.io/pypi/v/hinbert-fastapi)](https://pypi.org/project/hinbert-fastapi/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 # Hinbert FastAPI
 
 A modern, production-oriented FastAPI backend foundation for secure web applications. Built for teams that want a clean architecture, strong authentication defaults, scalable API design, and quick deployment without starting from scratch.
@@ -28,6 +34,8 @@ Hinbert FastAPI combines a pragmatic backend structure with security-first desig
 - Pydantic-based validation and environment configuration
 - Alembic migrations for database evolution
 - Python testing coverage for core business flows
+
+
 
 ### Available Commands
 
