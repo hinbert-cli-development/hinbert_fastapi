@@ -277,8 +277,14 @@ This project includes strong defaults for a starter backend, but production depl
 
 ## Contributing
 
-Contributions are welcome. Please keep pull requests focused, add or update tests for behavior changes, and keep code consistent with the existing project structure.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License. See [LICENSE](LICENSE) for details.
+
+## Support
+
+If you find this useful, please give it a ⭐ on GitHub!
+
+
