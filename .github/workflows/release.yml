@@ -8,19 +8,25 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       
       - name: Install build tools
-        run: pip install build
+        run: |
+          pip install --upgrade pip
+          pip install build twine   # ✅ Twine installed here
       
       - name: Build package
         run: python -m build
       
-      - name: Publish to PyPI
+      - name: Upload to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
