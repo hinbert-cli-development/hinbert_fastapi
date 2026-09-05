@@ -1,12 +1,9 @@
 
-## [0.2.1] - 2026-09-05
+## [0.2.2] - 2026-09-05
 
 ### Fixed
-- PyPI upload workflow
+- PyPI upload workflow with Twine
 - CI/CD pipeline
-- Trusted publisher configuration# Contributing to hinbert-fastapi
-
-Thank you for considering contributing! 🎉
 
 ## How to Contribute
 
@@ -32,3 +29,5 @@ pip install -r requirements-dev.txt
 
 # Run tests
 pytest -v --cov=app --cov-fail-under=80
+
+Thank you for considering contributing! 🎉
