@@ -15,7 +15,6 @@ from app.core.middleware.error_handler import register_exception_handlers
 from app.core.middleware.logging import RequestLoggingMiddleware
 from app.core.middleware.rate_limit import limiter, register_rate_limit
 
-
 def create_app() -> FastAPI:
     """Build and configure the application.
 

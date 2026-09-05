@@ -1,6 +1,14 @@
 """Small authentication primitives shared by services and dependencies."""
 
+from app.core.security.jwt import decode_token
 from app.core.security.password import verify_password
+
+
+def create_token(subject, token_type, expires_delta):
+    """Create a token through the selected authentication boundary."""
+    from app.core.security.jwt import create_token as jwt_create_token
+
+    return jwt_create_token(subject, token_type, expires_delta)
 
 
 def authenticate_password(password: str, password_hash: str) -> bool:

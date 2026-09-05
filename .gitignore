@@ -11,3 +11,5 @@ build/
 .coverage
 dist/
 *.egg-info/
+*.pyc
+*.pyo

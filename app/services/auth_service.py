@@ -6,7 +6,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from app.core.config.settings import get_settings
-from app.core.security.jwt import create_token
+from app.core.security.auth import create_token
 from app.core.security.password import hash_password
 
 

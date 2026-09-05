@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.exceptions.custom_exceptions import UnauthorizedError
-from app.core.security.jwt import decode_token
+from app.core.security.auth import decode_token
 from app.db.session import get_db
 from app.models.domain.user import User
 
