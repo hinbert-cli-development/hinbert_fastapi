@@ -1,12 +1,13 @@
 import ast
+import click
 import os
 import re
 import shutil
 import sys
-from pathlib import Path
 from importlib.metadata import version as get_version
+from pathlib import Path
+
 __version__ = get_version("hinbert-fastapi")
-import click
 
 # ============================================================
 # FIX 1: Windows Unicode Support
