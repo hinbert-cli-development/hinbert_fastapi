@@ -326,7 +326,6 @@ def configure_auth_imports(project_path, auth):
 @click.version_option(version=__version__, prog_name="hinbert")
 def cli():
     """Hinbert FastAPI CLI."""
-    pass
 
 
 @cli.command()
