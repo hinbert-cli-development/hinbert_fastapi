@@ -1,11 +1,11 @@
 import ast
-import click
 import os
 import re
 import shutil
 import sys
 from importlib.metadata import version as get_version
 from pathlib import Path
+import click
 
 __version__ = get_version("hinbert-fastapi")
 # ============================================================
