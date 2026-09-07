@@ -4,7 +4,8 @@ import re
 import shutil
 import sys
 from pathlib import Path
-
+from importlib.metadata import version as get_version
+__version__ = get_version("hinbert-fastapi")
 import click
 
 # ============================================================
@@ -324,6 +325,7 @@ def configure_auth_imports(project_path, auth):
 
 
 @click.group()
+@click.version_option(version=__version__, prog_name="hinbert")
 def cli():
     """Hinbert FastAPI CLI."""
 
