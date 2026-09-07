@@ -15,6 +15,7 @@ __version__ = get_version("hinbert-fastapi")
 # ============================================================
 if sys.platform == "win32":
     import io
+
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
@@ -936,8 +937,7 @@ black.entrypoint = black
         # SUCCESS
         # ========================================================
 
-        click.echo(
-            f"""
+        click.echo(f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
 ║    🎉 Project "{display_name}" is ready!                    ║
@@ -954,8 +954,7 @@ black.entrypoint = black
 ║                                                              ║
 ║    📖 Swagger: http://localhost:8000/docs                    ║
 ╚══════════════════════════════════════════════════════════════╝
-"""
-        )
+""")
 
     except Exception as exc:
 
