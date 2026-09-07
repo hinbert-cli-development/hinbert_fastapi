@@ -9,12 +9,12 @@ from pathlib import Path
 import click
 
 __version__ = get_version("hinbert-fastapi")
+
 # ============================================================
-# FIX 1: Windows Unicode Support
+# Windows Unicode Support
 # ============================================================
 if sys.platform == "win32":
     import io
-
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
@@ -85,9 +85,6 @@ def remove_empty_dirs(path):
         pass
 
 
-# ============================================================
-# IMPORT CLEANUP FUNCTIONS
-# ============================================================
 def cleanup_imports(project_path, removed_modules):
     """Remove imports and decorators that reference deleted optional modules."""
     app_path = project_path / "app"
@@ -329,6 +326,7 @@ def configure_auth_imports(project_path, auth):
 @click.version_option(version=__version__, prog_name="hinbert")
 def cli():
     """Hinbert FastAPI CLI."""
+    pass
 
 
 @cli.command()
@@ -773,7 +771,6 @@ BACKEND_CORS_ORIGINS=["http://localhost:3000", "http://localhost:8000"]
         elif auth == "oauth2":
             req_lines.append("python-jose[cryptography]>=3.3,<4.0")
 
-        # ✅ 2FA is INDEPENDENT of auth - add if enabled
         if two_factor:
             req_lines.append("pyotp>=2.9,<3.0")
 
@@ -823,7 +820,7 @@ black.entrypoint = black
         removed_modules = []
 
         # --------------------------------------------------------
-        # ✅ FIX: AUTHENTICATION CLEANUP (Keep totp.py for 2FA)
+        # AUTHENTICATION CLEANUP (Keep totp.py for 2FA)
         # --------------------------------------------------------
 
         if auth == "oauth2":
@@ -832,14 +829,10 @@ black.entrypoint = black
             write_auth_files(project_path, auth)
             configure_auth_imports(project_path, auth)
         elif auth == "none":
-            # ✅ Only delete JWT/OAuth/Password, keep TOTP if 2FA enabled
             security_dir = project_path / "app" / "core" / "security"
             if security_dir.exists():
-                # Delete only auth-specific files
                 for file in ["jwt.py", "oauth.py", "password.py"]:
                     (security_dir / file).unlink(missing_ok=True)
-                # Keep auth.py (basic auth) and totp.py (if 2FA)
-                # If only __init__.py remains, keep it
             removed_modules.append("core/security")
             write_auth_files(project_path, auth)
             configure_auth_imports(project_path, auth)
@@ -847,7 +840,7 @@ black.entrypoint = black
             write_auth_files(project_path, auth)
 
         # --------------------------------------------------------
-        # ✅ FIX: 2FA CLEANUP (Only if 2FA is disabled)
+        # 2FA CLEANUP (Only if 2FA is disabled)
         # --------------------------------------------------------
         if not two_factor:
             remove_paths(project_path, ["app/core/security/totp.py", "app/services/totp_service.py"])
@@ -861,7 +854,6 @@ black.entrypoint = black
                     "models/schemas/totp",
                 ],
             )
-        # ✅ If 2FA is enabled, keep totp.py - no action needed!
 
         # --------------------------------------------------------
         # EMAIL VERIFICATION CLEANUP
@@ -937,9 +929,7 @@ black.entrypoint = black
 
         for root, dirs, files in os.walk(project_path):
             root_path = Path(root)
-
             init_path = root_path / "__init__.py"
-
             if not init_path.exists():
                 init_path.touch()
 
