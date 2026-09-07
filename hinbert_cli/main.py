@@ -8,7 +8,6 @@ from importlib.metadata import version as get_version
 from pathlib import Path
 
 __version__ = get_version("hinbert-fastapi")
-
 # ============================================================
 # FIX 1: Windows Unicode Support
 # ============================================================
