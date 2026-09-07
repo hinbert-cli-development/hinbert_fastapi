@@ -937,7 +937,8 @@ black.entrypoint = black
         # SUCCESS
         # ========================================================
 
-        click.echo(f"""
+        click.echo(
+            f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
 ║    🎉 Project "{display_name}" is ready!                    ║
@@ -954,7 +955,8 @@ black.entrypoint = black
 ║                                                              ║
 ║    📖 Swagger: http://localhost:8000/docs                    ║
 ╚══════════════════════════════════════════════════════════════╝
-""")
+"""
+        )
 
     except Exception as exc:
 
