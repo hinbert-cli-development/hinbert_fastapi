@@ -1,0 +1,5 @@
+include README.md LICENSE
+recursive-include app *
+recursive-include scripts *
+recursive-include docker *
+recursive-include hinbert_cli *

@@ -23,8 +23,14 @@ hinbert-create-admin = "scripts.create_admin:main"
 hinbert-seed = "scripts.seed_data:main"
 hinbert-migrate = "scripts.run_migrations:main"
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.packages.find]
-include = ["hinbert_cli*", "app*", "scripts*"]
+include = ["hinbert_cli*", "app*", "scripts*", "docker*"]
+
+[tool.setuptools.package-data]
+docker = ["**/*"]
 
 [tool.black]
 line-length = 120

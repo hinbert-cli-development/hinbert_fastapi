@@ -3,12 +3,28 @@ import os
 import re
 import shutil
 import sys
-from importlib.metadata import version as get_version
+from importlib.metadata import PackageNotFoundError, version as get_version
 from pathlib import Path
 
 import click
 
-__version__ = get_version("hinbert-fastapi")
+
+def get_project_version() -> str:
+    """Return the installed package version, or a source-tree fallback."""
+    try:
+        return get_version("hinbert-fastapi")
+    except PackageNotFoundError:
+        pyproject_path = Path(__file__).resolve().parent.parent / "pyproject.toml"
+        try:
+            match = re.search(r'^version\s*=\s*["\']([^"\']+)["\']', pyproject_path.read_text(encoding="utf-8"), re.M)
+            if match:
+                return match.group(1)
+        except OSError:
+            pass
+        return "0.0.0"
+
+
+__version__ = get_project_version()
 
 # ============================================================
 # Windows Unicode Support
@@ -387,6 +403,11 @@ def cli():
     is_flag=True,
     help="Skip confirmation prompt.",
 )
+@click.option(
+    "--force",
+    is_flag=True,
+    help="Overwrite an existing target directory when generating a project.",
+)
 def init(
     project_name,
     db,
@@ -398,6 +419,7 @@ def init(
     k8s,
     logging_library,
     yes,
+    force,
 ):
     """
     Initialize a new professional FastAPI project.
@@ -437,7 +459,18 @@ def init(
         database_name = project_name
 
         if project_path.exists():
-            raise click.ClickException(f"Folder '{project_name}' already exists!")
+            if not force:
+                raise click.ClickException(
+                    f"Folder '{project_name}' already exists! Re-run with --force to overwrite it."
+                )
+            if not project_path.is_dir():
+                raise click.ClickException(f"Target path '{project_name}' exists and is not a directory.")
+
+    if not project_name or project_name.strip() != project_name or project_name in {".", ".."}:
+        raise click.ClickException("Project name must be a non-empty directory name and cannot be '.' or '..'.")
+
+    if any(ch.isspace() for ch in project_name):
+        raise click.ClickException("Project name cannot contain spaces. Use a directory-safe slug such as 'my_app'.")
 
     # ============================================================
     # DATABASE
