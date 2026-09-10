@@ -29,7 +29,21 @@ def test_cli_requires_force_for_existing_directory():
 
         result = runner.invoke(
             cli,
-            ["init", "existing-project", "--yes", "--db", "sqlite", "--auth", "none", "--no-2fa", "--no-email", "--no-rate-limit", "--no-docker", "--logging", "none"],
+            [
+                "init",
+                "existing-project",
+                "--yes",
+                "--db",
+                "sqlite",
+                "--auth",
+                "none",
+                "--no-2fa",
+                "--no-email",
+                "--no-rate-limit",
+                "--no-docker",
+                "--logging",
+                "none",
+            ],
         )
 
         assert result.exit_code != 0
@@ -41,7 +55,21 @@ def test_cli_generates_project_with_selected_options():
     with runner.isolated_filesystem():
         result = runner.invoke(
             cli,
-            ["init", "demo-app", "--yes", "--db", "sqlite", "--auth", "none", "--no-2fa", "--no-email", "--no-rate-limit", "--no-docker", "--logging", "none"],
+            [
+                "init",
+                "demo-app",
+                "--yes",
+                "--db",
+                "sqlite",
+                "--auth",
+                "none",
+                "--no-2fa",
+                "--no-email",
+                "--no-rate-limit",
+                "--no-docker",
+                "--logging",
+                "none",
+            ],
         )
 
         assert result.exit_code == 0, result.output
