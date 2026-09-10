@@ -3,7 +3,8 @@ import os
 import re
 import shutil
 import sys
-from importlib.metadata import PackageNotFoundError, version as get_version
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as get_version
 from pathlib import Path
 
 import click
@@ -16,7 +17,7 @@ def get_project_version() -> str:
     except PackageNotFoundError:
         pyproject_path = Path(__file__).resolve().parent.parent / "pyproject.toml"
         try:
-            match = re.search(r'^version\s*=\s*["\']([^"\']+)["\']', pyproject_path.read_text(encoding="utf-8"), re.M)
+            match = re.search(r'^version\s*=\s*["\']([^"\']+)["\']', pyproject_path.read_text(encoding="utf-8"), re.MULTILINE)
             if match:
                 return match.group(1)
         except OSError:
