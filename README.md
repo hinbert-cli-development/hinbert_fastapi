@@ -291,8 +291,6 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 
 MIT License. See [LICENSE](LICENSE) for details.
 
-## Support
 
-If you find this useful, please give it a ⭐ on GitHub!
 
 
